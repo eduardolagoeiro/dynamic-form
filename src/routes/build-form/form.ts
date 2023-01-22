@@ -425,4 +425,194 @@ export const form2: ICalculator = {
 	]
 }
 
-export const forms = [form1, form2]
+export const form3: ICalculator = {
+	name: 'valor mapeado',
+	expression: 'PEOPLE * ((CALORIES * DIET) + (TRASH * 1.5))',
+	nameMapper: {
+		peopleInYourHouse: 'PEOPLE',
+		calories: 'CALORIES',
+		foodHabitsType: 'DIET',
+		trash: 'TRASH'
+	},
+	valueMapper: {
+		foodHabitsType: {
+			'highly-meat': 3,
+			'some-meat': 2.5,
+			'few-meat': 2.1,
+			'fish-veg': 1.9,
+			'egg-veg': 1.7,
+			veg: 1.5
+		}
+	},
+	steps: [
+		{
+			title: 'Moradia',
+			inputs: [
+				{
+					key: 'peopleInYourHouse',
+					min: 1,
+					label: 'Quantas pessoas moram na sua casa',
+					type: 'number'
+				}
+			]
+		},
+		{
+			title: 'Hábitos alimentares',
+			inputs: [
+				{
+					key: 'foodHabitsType',
+					type: 'select',
+					label: 'Como você classificaria sua dieta?',
+					options: [
+						{
+							label: 'Alto consumo de carnes',
+							value: 'highly-meat'
+						},
+						{
+							label: 'Consumo de carnes mediano',
+							value: 'some-meat'
+						},
+						{
+							label: 'Flexitariana (carne no máx 3x por semana)',
+							value: 'few-meat'
+						},
+						{
+							label: 'Pesco-vegetariana',
+							value: 'fish-veg'
+						},
+						{
+							label: 'Ovo-lacto-vegetariana',
+							value: 'egg-veg'
+						},
+						{
+							label: 'Vegetariana estrita/vegana',
+							value: 'veg'
+						}
+					]
+				},
+				{
+					key: 'calories',
+					label: 'Em média, quantas calorias cada pessoa come na sua casa?',
+					type: 'number'
+				}
+			]
+		},
+		{
+			title: 'Lixo',
+			inputs: [
+				{
+					key: 'trash',
+					min: 0,
+					label: 'Quantos kgs de lixo sua família produz por dia?',
+					type: 'number'
+				}
+			]
+		}
+	]
+}
+
+export const form4: ICalculator = {
+	name: 'valor mapeado com fallback',
+	expression: 'PEOPLE * ((CALORIES * DIET) + (TRASH * 1.5))',
+	nameMapper: {
+		peopleInYourHouse: 'PEOPLE',
+		calories: 'CALORIES',
+		foodHabitsType: 'DIET',
+		trash: 'TRASH'
+	},
+	valueMapper: {
+		foodHabitsType: {
+			'highly-meat': 3,
+			'some-meat': 2.5,
+			'few-meat': 2.1,
+			'fish-veg': 1.9,
+			'egg-veg': 1.7,
+			veg: 1.5
+		},
+		trash: {
+			nada: 0,
+			muito_pouco: 1,
+			pouco: 1.5,
+			moderadamente: 2,
+			bastante: 2.3
+		}
+	},
+	steps: [
+		{
+			title: 'Moradia',
+			inputs: [
+				{
+					key: 'peopleInYourHouse',
+					min: 1,
+					label: 'Quantas pessoas moram na sua casa',
+					type: 'number'
+				}
+			]
+		},
+		{
+			title: 'Hábitos alimentares',
+			inputs: [
+				{
+					key: 'foodHabitsType',
+					type: 'select',
+					label: 'Como você classificaria sua dieta?',
+					options: [
+						{
+							label: 'Alto consumo de carnes',
+							value: 'highly-meat'
+						},
+						{
+							label: 'Consumo de carnes mediano',
+							value: 'some-meat'
+						},
+						{
+							label: 'Flexitariana (carne no máx 3x por semana)',
+							value: 'few-meat'
+						},
+						{
+							label: 'Pesco-vegetariana',
+							value: 'fish-veg'
+						},
+						{
+							label: 'Ovo-lacto-vegetariana',
+							value: 'egg-veg'
+						},
+						{
+							label: 'Vegetariana estrita/vegana',
+							value: 'veg'
+						}
+					]
+				},
+				{
+					key: 'calories',
+					label: 'Em média, quantas calorias cada pessoa come na sua casa?',
+					type: 'number'
+				}
+			]
+		},
+		{
+			title: 'Lixo',
+			inputs: [
+				{
+					key: 'trash',
+					min: 0,
+					label: 'Quantos kgs de lixo sua família produz por dia?',
+					type: 'select',
+					options: [
+						{ value: 'nada', label: 'Nada' },
+						{ value: 'muito_pouco', label: 'Muito pouco' },
+						{ value: 'pouco', label: 'Pouc' },
+						{ value: 'moderadamente', label: 'Moderadamente' },
+						{ value: 'bastante', label: 'Bastante' }
+					],
+					noneFallback: {
+						label: 'Sabe o valor exato?',
+						type: 'number'
+					}
+				}
+			]
+		}
+	]
+}
+
+export const forms = [form1, form2, form3, form4]
