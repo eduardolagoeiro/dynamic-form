@@ -4,5 +4,4 @@
 	import '../app.css'
 </script>
 
-<div>Layout</div>
 <slot />
