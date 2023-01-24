@@ -615,4 +615,54 @@ export const form4: ICalculator = {
 	]
 }
 
-export const forms = [form1, form2, form3, form4]
+export const ipiranga: ICalculator = {
+	name: 'ipiranga',
+	expression: 'TOTAL_VALUE / PRECO_GASOLINA_ESTADO',
+	nameMapper: {
+		totalValue: 'TOTAL_VALUE',
+		gasPrice: 'GAS_PRICE'
+	},
+	valueMapper: {
+		gasPrice: {
+			ALTO: 6,
+			MEDIO: 5.5,
+			BAIXO: 5
+		},
+	},
+	steps: [
+		{
+			title: 'Valor pago',
+			inputs: [
+				{
+					key: 'totalValue',
+					min: 0,
+					label: 'Qual é o valor que você pagou no posto?',
+					type: 'number'
+				}
+			]
+		},
+		{
+			title: 'Preço da gasolina',
+			inputs: [
+				{
+					key: 'gasPrice',
+					min: 0,
+					label: 'Quanto estava o preço da gasolina? (preço/litro)',
+					// type: 'number'
+					type: 'select',
+					options: [
+						{ value: 'ALTO', label: 'R$ 6,00' },
+						{ value: 'MEDIO', label: 'R$ 5,50' },
+						{ value: 'BAIXO', label: 'R$ 5,00' }
+					],
+					noneFallback: {
+						label: 'Sabe o valor exato?',
+						type: 'number'
+					}
+				}
+			]
+		}
+	]
+}
+
+export const forms = [form1, ipiranga, form2, form3, form4]
