@@ -107,6 +107,14 @@
 		active.set(0)
 	})
 
+	let selected = 1
+
+	$: {
+		formIndex.set(selected)
+	}
+
+	formIndex.subscribe((val) => (selected = val))
+
 	$: form = forms[$formIndex]
 
 	$: values = valuesMap[form.name]
@@ -116,7 +124,7 @@
 	$: result = calc(form.expression, context)
 </script>
 
-<div class="p-5">
+<div class="p-5 hidden sm:block">
 	<RadioGroup selected={formIndex}>
 		{#each forms as form, i}
 			<RadioItem value={i}>{form.name}</RadioItem>
@@ -124,8 +132,16 @@
 	</RadioGroup>
 </div>
 
+<div class="p-5 sm:hidden">
+	<select bind:value={selected}>
+		{#each forms as form, i}
+			<option value={i}>{form.name}</option>
+		{/each}
+	</select>
+</div>
+
 <div class="flex gap-10 p-5">
-	<div class="flex-1">
+	<div class="flex-1 hidden sm:block">
 		<h2>Calculation:</h2>
 		<pre>{form.expression} = {result}</pre>
 
