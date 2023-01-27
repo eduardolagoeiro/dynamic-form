@@ -2,7 +2,7 @@
 	import { Stepper, Step, RadioGroup, RadioItem } from '@skeletonlabs/skeleton'
 	import { writable, type Writable } from 'svelte/store'
 	import { slide } from 'svelte/transition'
-	import { forms, type Conditional, type JSONForm } from './form'
+	import { forms, globalValues, type Conditional, type JSONForm } from './form'
 	import Select from './select.svelte'
 	import SelectFallback from './select_fallback.svelte'
 	import * as math from 'mathjs'
@@ -67,7 +67,8 @@
 	export function getContext(
 		values: Record<string, any>,
 		nameMapper: Record<string, string>,
-		valueMapper: Record<string, Record<string, number>>
+		valueMapper: Record<string, Record<string, number>>,
+		globals?: Record<string, string>
 	) {
 		const context: Record<string, number> = {}
 
@@ -98,6 +99,26 @@
 			}
 		}
 
+		if (globals) {
+			Object.keys(globals).forEach((globalKey) => {
+				const mappedKey = globals[globalKey]
+				const value = values[mappedKey]
+				if (typeof value === 'number') {
+					context[globalKey] = value
+					return
+				}
+				if (typeof value === 'string') {
+					context[globalKey] = globalValues.valueMapper[globalKey][value]
+				}
+				console.warn(`not mapped type ${typeof value}`)
+			})
+		}
+
+		Object.keys(globalValues.constants).forEach((key) => {
+			const value = globalValues.constants[key]
+			context[key] = value
+		})
+
 		return context
 	}
 
@@ -119,7 +140,7 @@
 
 	$: values = valuesMap[form.name]
 
-	$: context = getContext(values, form.nameMapper, form.valueMapper)
+	$: context = getContext(values, form.nameMapper, form.valueMapper, form.globals)
 
 	$: result = calc(form.expression, context)
 </script>

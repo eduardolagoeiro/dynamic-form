@@ -42,6 +42,7 @@ export interface ICalculator {
 	expression: string
 	nameMapper: Record<string, string>
 	valueMapper: Record<string, Record<string, number>>
+	globals?: Record<string, string>
 	steps: JSONFormSteps
 }
 
@@ -615,50 +616,61 @@ export const form4: ICalculator = {
 	]
 }
 
-export const ipiranga: ICalculator = {
-	name: 'ipiranga',
-	expression: 'TOTAL_VALUE / PRECO_GASOLINA_ESTADO',
-	nameMapper: {
-		totalValue: 'TOTAL_VALUE',
-		gasPrice: 'GAS_PRICE'
+export const globalValues: {
+	constants: Record<string, number>
+	valueMapper: Record<string, Record<string, number>>
+} = {
+	constants: {
+		PI: 3.14
 	},
 	valueMapper: {
-		gasPrice: {
-			ALTO: 6,
-			MEDIO: 5.5,
-			BAIXO: 5
+		PRECO_GASOLINA_ESTADO: {
+			RJ: 1.2,
+			SP: 2.2
 		},
+		PESO_ESTADO_GLOBAL: {
+			RJ: 1.3,
+			SP: 2.3
+		}
+	}
+}
+
+export const ipiranga: ICalculator = {
+	name: 'ipiranga',
+	expression: 'TOTAL_VALUE / PRECO_GASOLINA_ESTADO * PI * PESO_ESTADO_GLOBAL * PESO_ESTADO_CTX',
+	nameMapper: {
+		totalValue: 'TOTAL_VALUE',
+		state: 'PESO_ESTADO_CTX'
+	},
+	globals: {
+		PRECO_GASOLINA_ESTADO: 'state',
+		PESO_ESTADO_GLOBAL: 'state'
+	},
+	valueMapper: {
+		state: {
+			RJ: 1.1,
+			SP: 2.1
+		}
 	},
 	steps: [
 		{
-			title: 'Valor pago',
+			title: 'Ipiranga',
 			inputs: [
+				{
+					key: 'state',
+					min: 0,
+					label: 'O posto de gasolina era de qual estado?',
+					type: 'select',
+					options: [
+						{ value: 'SP', label: 'São Paulo' },
+						{ value: 'RJ', label: 'Rio de Janeiro' }
+					]
+				},
 				{
 					key: 'totalValue',
 					min: 0,
 					label: 'Qual é o valor que você pagou no posto?',
 					type: 'number'
-				}
-			]
-		},
-		{
-			title: 'Preço da gasolina',
-			inputs: [
-				{
-					key: 'gasPrice',
-					min: 0,
-					label: 'Quanto estava o preço da gasolina? (preço/litro)',
-					// type: 'number'
-					type: 'select',
-					options: [
-						{ value: 'ALTO', label: 'R$ 6,00' },
-						{ value: 'MEDIO', label: 'R$ 5,50' },
-						{ value: 'BAIXO', label: 'R$ 5,00' }
-					],
-					noneFallback: {
-						label: 'Sabe o valor exato?',
-						type: 'number'
-					}
 				}
 			]
 		}
